@@ -100,7 +100,7 @@
       upper="3.14"
       effort="3"
       velocity="1" />
-    <dynamics damping="2.0" friction="0.5"/>
+    <dynamics damping="10.0" friction="1.0"/>
   </joint>
   <link
     name="link2">
@@ -159,7 +159,7 @@
       upper="3.14"
       effort="3"
       velocity="1" />
-    <dynamics damping="2.0" friction="0.5"/>
+    <dynamics damping="10.0" friction="1.0"/>
   </joint>
   <link
     name="link3">
@@ -218,7 +218,7 @@
       upper="3.14"
       effort="3"
       velocity="1" />
-    <dynamics damping="2.0" friction="0.5"/>
+    <dynamics damping="10.0" friction="1.0"/>
   </joint>
   <link
     name="link4">
@@ -277,7 +277,7 @@
       upper="3.14"
       effort="3"
       velocity="1" />
-    <dynamics damping="2.0" friction="0.5"/>
+    <dynamics damping="10.0" friction="1.0"/>
   </joint>
   <link
     name="link5">
@@ -336,7 +336,7 @@
       upper="3.14"
       effort="3"
       velocity="1" />
-    <dynamics damping="1.5" friction="0.3"/>
+    <dynamics damping="8.0" friction="0.8"/>
   </joint>
   <link
     name="link6">
@@ -395,7 +395,7 @@
       upper="3.14"
       effort="3"
       velocity="1" />
-    <dynamics damping="1.5" friction="0.3"/>
+    <dynamics damping="8.0" friction="0.8"/>
   </joint>
   <link
     name="gripper_centor_link">
@@ -495,9 +495,11 @@
       </geometry>
     </collision>
   </link>
+  <!-- Gripper joints - 现在是fixed（刚性固定） -->
+  <!-- 如需恢复可动夹爪，改为type="prismatic"并添加axis、limit、dynamics -->
   <joint
     name="gripper_1_joint"
-    type="prismatic">
+    type="fixed">
     <origin
       xyz="0 0 0.148"
       rpy="0 -1.5708 0" />
@@ -505,13 +507,11 @@
       link="link6" />
     <child
       link="gripper_1_link" />
-    <axis
-      xyz="0 0 1" />
-    <limit
-      lower="-0.06"
-      upper="0.06"
-      effort="0.18"
-      velocity="1" />
+    <!-- 可动夹爪配置（已禁用）：
+    <axis xyz="0 0 1" />
+    <limit lower="-0.06" upper="0.06" effort="5.0" velocity="1" />
+    <dynamics damping="1.0" friction="0.5"/>
+    -->
   </joint>
   <link
     name="gripper_2_link">
@@ -555,7 +555,7 @@
   </link>
   <joint
     name="gripper_2_joint"
-    type="prismatic">
+    type="fixed">
     <origin
       xyz="0 0 0.148"
       rpy="0 -1.5708 0" />
@@ -563,16 +563,11 @@
       link="link6" />
     <child
       link="gripper_2_link" />
-    <axis
-      xyz="0 0 1" />
-    <limit
-      lower="-0.06"
-      upper="0.06"
-      effort="0.18"
-      velocity="1" />
-    <mimic
-      joint="gripper_1_joint"
-      multiplier="-1"
-      offset="0" />
+    <!-- 可动夹爪配置（已禁用）：
+    <axis xyz="0 0 1" />
+    <limit lower="-0.06" upper="0.06" effort="5.0" velocity="1" />
+    <dynamics damping="1.0" friction="0.5"/>
+    <mimic joint="gripper_1_joint" multiplier="-1" offset="0" />
+    -->
   </joint>
 </robot>

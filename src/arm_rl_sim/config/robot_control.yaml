@@ -22,8 +22,12 @@ controller_manager:
     joint6_controller:
       type: robot_joint_controller/RobotJointController
     
-    gripper_controller:
-      type: robot_joint_controller/RobotJointController
+    # 夹爪控制器 - 已改为fixed关节，暂时禁用
+    # gripper_1_controller:
+    #   type: robot_joint_controller/RobotJointController
+    # 
+    # gripper_2_controller:
+    #   type: robot_joint_controller/RobotJointController
     
     robot_joint_controller_group:
       type: robot_joint_controller/RobotJointControllerGroup
@@ -56,9 +60,14 @@ joint6_controller:
   ros__parameters:
     joints: "joint6"
 
-gripper_controller:
-  ros__parameters:
-    joints: "gripper_1_joint"
+# 夹爪控制器参数 - 已禁用
+# gripper_1_controller:
+#   ros__parameters:
+#     joints: "gripper_1_joint"
+# 
+# gripper_2_controller:
+#   ros__parameters:
+#     joints: "gripper_2_joint"
 
 # Group controller parameters
 robot_joint_controller_group:

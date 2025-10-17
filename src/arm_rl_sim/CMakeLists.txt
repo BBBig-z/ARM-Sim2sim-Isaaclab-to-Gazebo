@@ -11,6 +11,14 @@ find_package(rclpy REQUIRED)
 install(PROGRAMS
   scripts/arm_rl_sim.py
   scripts/target_pose_publisher.py
+  scripts/gripper_mimic_controller.py
+  scripts/gripper_holder.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install database file with scripts
+install(FILES
+  scripts/reachable_poses_database.pkl
   DESTINATION lib/${PROJECT_NAME}
 )
 

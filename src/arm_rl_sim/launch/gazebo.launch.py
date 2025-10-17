@@ -56,7 +56,7 @@ def generate_launch_description():
 
     # 延迟 spawn_entity，等待 Gazebo 完全启动
     spawn_entity = TimerAction(
-        period=2.0,  # 等待 2 秒
+        period=1.0,  # 等待 1 秒（增加延迟确保Gazebo完全就绪）
         actions=[
             Node(
                 package="gazebo_ros",
@@ -67,6 +67,8 @@ def generate_launch_description():
                     "-timeout", "120.0",
                     "-robot_namespace", "",
                     "-unpause"  # 立即取消暂停，确保物理引擎启动
+                    # 注意：ROS 2 Humble的spawn_entity不支持-J参数设置初始关节位置
+                    # 初始位置由arm_rl_sim.py中的初始化阶段控制
                 ],
                 output="screen",
             )
@@ -75,24 +77,24 @@ def generate_launch_description():
 
     # 延迟启动控制器 spawner（等待 gazebo_ros2_control 完全加载）
     joint_state_broadcaster_spawner = TimerAction(
-        period=5.0,
+        period=8.0,
         actions=[
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+                arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager", "--controller-manager-timeout", "60"],
                 output="screen",
             )
         ]
     )
     
     robot_joint_controller_group_spawner = TimerAction(
-        period=6.0,
+        period=9.0,
         actions=[
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["robot_joint_controller_group", "--controller-manager", "/controller_manager"],
+                arguments=["robot_joint_controller_group", "--controller-manager", "/controller_manager", "--controller-manager-timeout", "60"],
                 output="screen",
             )
         ]
@@ -108,9 +110,60 @@ def generate_launch_description():
         }],
     )
 
+    # 夹爪控制器spawner - 已禁用（夹爪改为fixed关节）
+    # gripper_1_controller_spawner = TimerAction(
+    #     period=10.0,
+    #     actions=[
+    #         Node(
+    #             package="controller_manager",
+    #             executable="spawner",
+    #             arguments=["gripper_1_controller", "--controller-manager", "/controller_manager", "--controller-manager-timeout", "60"],
+    #             output="screen",
+    #         )
+    #     ]
+    # )
+    # 
+    # gripper_2_controller_spawner = TimerAction(
+    #     period=10.5,
+    #     actions=[
+    #         Node(
+    #             package="controller_manager",
+    #             executable="spawner",
+    #             arguments=["gripper_2_controller", "--controller-manager", "/controller_manager", "--controller-manager-timeout", "60"],
+    #             output="screen",
+    #         )
+    #     ]
+    # )
+
+    # Gripper holder - 已禁用（夹爪改为fixed关节）
+    # gripper_holder = TimerAction(
+    #     period=11.0,
+    #     actions=[
+    #         Node(
+    #             package="arm_rl_sim",
+    #             executable="gripper_holder.py",
+    #             name="gripper_holder",
+    #             output="screen",
+    #         )
+    #     ]
+    # )
+    # 
+    # # Gripper mimic controller - 已禁用（夹爪改为fixed关节）
+    # gripper_mimic_controller = TimerAction(
+    #     period=11.5,
+    #     actions=[
+    #         Node(
+    #             package="arm_rl_sim",
+    #             executable="gripper_mimic_controller.py",
+    #             name="gripper_mimic_controller",
+    #             output="screen",
+    #         )
+    #     ]
+    # )
+    
     # ARM RL Sim node - 延迟启动，确保控制器已加载 (使用 Python 版本)
     arm_rl_sim_node = TimerAction(
-        period=8.0,
+        period=12.0,
         actions=[
             Node(
                 package="arm_rl_sim",
@@ -124,7 +177,7 @@ def generate_launch_description():
 
     # Target pose publisher (for testing)
     target_pose_publisher = TimerAction(
-        period=10.0,
+        period=13.0,
         actions=[
             Node(
                 package="arm_rl_sim",
@@ -147,6 +200,11 @@ def generate_launch_description():
         param_node,
         joint_state_broadcaster_spawner,
         robot_joint_controller_group_spawner,
+        # 夹爪控制器已禁用（改为fixed关节）
+        # gripper_1_controller_spawner,
+        # gripper_2_controller_spawner,
+        # gripper_holder,
+        # gripper_mimic_controller,
         arm_rl_sim_node,
         target_pose_publisher,
     ])

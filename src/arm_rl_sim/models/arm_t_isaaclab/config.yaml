@@ -1,20 +1,21 @@
 arm_t_isaaclab:
   model_name: "policy.pt"
   framework: "isaaclab"
-  dt: 0.016666666666666666  # 60Hz
+  dt: 0.036666666666666666  # 60Hz
   decimation: 2
-  num_observations: 19  # 6(joint_pos) + 6(joint_vel) + 7(pose_cmd)
+  num_observations: 25  # 6(joint_pos) + 6(joint_vel) + 7(pose_cmd) + 6(actions)
   observations: ["joint_pos", "joint_vel", "pose_command", "actions"]
   observations_history: []
   clip_obs: 100.0
   clip_actions_lower: [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
   clip_actions_upper: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
   
-  # PD 控制参数（参考 Isaac Lab HIGH_PD_CFG）
-  # Isaac Lab IK 使用: stiffness=[500,450,400,350,300,250], damping=[150,140,130,110,90,80]
-  # 注意: Isaac Lab 关闭了重力，Gazebo 有重力需要更高增益
-  rl_kp: [50,45,40,35,30,2.5]
-  rl_kd: [15,14,13,12,11,1]
+  # PD 控制参数（大幅降低以提高数值稳定性）
+  # 原Isaac Lab: stiffness=[500,450,400,350,300,250], damping=[150,140,130,110,90,80]
+  # Gazebo需要更保守的增益以避免数值爆炸
+  
+  rl_kp: [5.0, 5.0, 5.0, 3.0, 0.8, 0.4]  # 降低前4关节增益
+  rl_kd: [1.5, 1.5, 1.5, 1.0, 0.3, 0.6]  # 相应降低阻尼
   
   # 备用固定 PD 参数（当 RL 控制器的增益不稳定或不适用时，切换回这些参数以保证安全和基础稳定性。即“兜底”用途）
   fixed_kp: [0, 0, 0, 0,0, 0]
@@ -24,17 +25,16 @@ arm_t_isaaclab:
   hip_scale_reduction_indices: []
   
   num_of_dofs: 6
-  action_scale: 0.3  # 与 env.yaml 的 scale 一致
+  action_scale: 0.15  # 降低以提高稳定性（原0.3）
   lin_vel_scale: 1.0  # 机械臂不需要，但保留接口兼容性
   ang_vel_scale: 1.0
   dof_pos_scale: 1.0
   dof_vel_scale: 1.0
   commands_scale: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]  # 7维位姿命令
   
-  torque_limits: [3.0, 3.0, 3.0, 3.0, 3.0, 3.0]  # effort_limit_sim
+  torque_limits: [2.5, 2.5, 2.5, 2.0, 1.5, 1.0]  # effort_limit (保守限制，避免过激运动)
   
-  # 安全的初始姿态：机械臂向前上方伸展，避免自碰撞
-  default_dof_pos: [0.0, -0.785, 1.57, 0.0, 0.0, 0.0]
+  default_dof_pos: [0.0, -0.5, 0.5, 0.0, 0.0, 0.0]  # 与URDF的initial_value一致
   
   joint_controller_names: 
     - "joint1_controller"

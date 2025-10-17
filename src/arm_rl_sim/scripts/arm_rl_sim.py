@@ -98,6 +98,9 @@ class ARM_RL_Sim(Node):
         self.ee_frame = "link6"  # End-effector frame
         self.base_frame = "base_link"
         
+        # Initialize KDL for differential IK
+        self.init_kdl_chain()
+        
         # Publisher (use group controller)
         self.robot_command_publisher = self.create_publisher(
             RobotCommandMsg,
@@ -139,6 +142,13 @@ class ARM_RL_Sim(Node):
         self.thread_rl.start()
         
         self.get_logger().info("ARM_RL_Sim started")
+    
+    def init_kdl_chain(self):
+        """Initialize differential IK (simplified version)"""
+        self.use_simplified_ik = True
+        self.damping = 0.01  # Damping factor (reserved for future use)
+        
+        self.get_logger().info("Differential IK initialized (simplified heuristic mode)")
     
     def load_config(self):
         """Load configuration from YAML file"""
@@ -206,25 +216,145 @@ class ARM_RL_Sim(Node):
     def forward(self):
         """Run model inference"""
         obs = self.get_observation()
-        actions = self.model(obs)
-        actions = torch.clamp(actions, self.clip_actions_lower, self.clip_actions_upper)
-        return actions
+        
+        # Debug: 检查观测值是否有NaN
+        if torch.isnan(obs).any():
+            self.get_logger().error(f"❌ 观测值包含NaN! obs shape: {obs.shape}")
+            self.get_logger().error(f"  joint_pos: {self.obs_dof_pos[0]}")
+            self.get_logger().error(f"  joint_vel: {self.obs_dof_vel[0]}")
+            self.get_logger().error(f"  target_pose: {self.obs_target_pose[0]}")
+            self.get_logger().error(f"  actions: {self.obs_actions[0]}")
+            # 返回零动作而不是NaN
+            return torch.zeros(1, self.num_of_dofs)
+        
+        # Debug: 第一次推理时打印完整观测
+        if not hasattr(self, '_first_inference_logged'):
+            self._first_inference_logged = True
+            self.get_logger().info(f"🔍 首次推理 - 完整观测值:")
+            self.get_logger().info(f"  joint_pos (raw): {self.obs_dof_pos[0]}")
+            self.get_logger().info(f"  joint_vel (raw): {self.obs_dof_vel[0]}")
+            self.get_logger().info(f"  target_pose: {self.obs_target_pose[0]}")
+            self.get_logger().info(f"  actions (history): {self.obs_actions[0]}")
+            self.get_logger().info(f"  obs tensor (前10维): {obs[0][:10]}")
+        
+        # Debug: 定期打印观测值统计
+        if int(time.time()) % 5 == 0:
+            self.get_logger().info(
+                f"观测值范围: min={obs.min():.3f}, max={obs.max():.3f}, "
+                f"mean={obs.mean():.3f}, shape={obs.shape}",
+                throttle_duration_sec=5.0
+            )
+        
+        try:
+            actions = self.model(obs)
+            
+            # 检查模型输出
+            if torch.isnan(actions).any():
+                self.get_logger().error(f"❌ 模型输出NaN!")
+                self.get_logger().error(f"  输入obs min/max/mean: {obs.min():.4f}/{obs.max():.4f}/{obs.mean():.4f}")
+                self.get_logger().error(f"  输出actions: {actions[0]}")
+                return torch.zeros(1, self.num_of_dofs)
+            
+            actions = torch.clamp(actions, self.clip_actions_lower, self.clip_actions_upper)
+            return actions
+        except Exception as e:
+            self.get_logger().error(f"❌ 模型推理异常: {e}")
+            return torch.zeros(1, self.num_of_dofs)
+    
+    def differential_ik(self, pose_delta, current_joint_pos):
+        """差分逆运动学：使用伪雅可比矩阵
+        
+        dq = J_pinv @ dx
+        其中 J_pinv 是雅可比伪逆矩阵
+        """
+        # 使用一个近似雅可比伪逆矩阵 (6x6)
+        # 这个矩阵是基于机械臂在典型工作姿态 [0, -0.5, 1.57, 0, 0, 0] 附近的雅可比估计
+        # 行: 关节1-6, 列: [dx, dy, dz, droll, dpitch, dyaw]
+        
+        J_pinv = np.array([
+            [ 0.0,  5.0,  0.0,  0.0,  0.0,  3.0],  # joint1: 主要响应 dy, dyaw
+            [ 0.0,  0.0,  3.5, -0.5,  0.0,  0.0],  # joint2: 主要响应 dz
+            [ 4.0,  0.0,  1.5,  1.0,  0.0,  0.0],  # joint3: 主要响应 dx, dz
+            [ 0.0,  0.0,  0.0,  0.0,  5.0,  0.0],  # joint4: 主要响应 dpitch
+            [ 0.0,  0.0,  0.0,  5.0,  0.0,  0.0],  # joint5: 主要响应 droll
+            [ 0.0,  0.0,  0.0,  0.0,  0.0,  2.5],  # joint6: 主要响应 dyaw
+        ], dtype=np.float32)
+        
+        # 应用雅可比伪逆
+        joint_delta = J_pinv @ pose_delta
+        
+        return torch.tensor(joint_delta, dtype=torch.float32)
     
     def compute_torques(self, actions):
         """Compute joint torques from actions using PD control"""
-        # Target positions: default + scaled actions
-        target_pos = self.default_dof_pos + actions[0] * self.action_scale
+        pose_delta = (actions[0] * self.action_scale).detach().cpu().numpy()
+        current_joint_pos = self.obs_dof_pos[0].detach().cpu().numpy()
         
-        # PD control
+        # 限制pose_delta幅度，防止过大运动
+        max_pose_delta = 0.1  # 最大10cm/10度
+        pose_delta = np.clip(pose_delta, -max_pose_delta, max_pose_delta)
+        
+        joint_delta = self.differential_ik(pose_delta, current_joint_pos)
+        
+        # 限制joint_delta幅度，防止过大关节运动
+        max_joint_delta = 0.3  # 最大0.3弧度 (~17度)
+        joint_delta = torch.clamp(joint_delta, -max_joint_delta, max_joint_delta)
+        
+        # Debug: 完整控制链路验证
+        if int(time.time()) % 3 == 0:
+            # 目标位姿
+            target_xyz = [self.target_pose.pose.position.x, self.target_pose.pose.position.y, self.target_pose.pose.position.z]
+            
+            # 当前末端位姿
+            actual_pos, actual_rpy = self.get_ee_pose()
+            
+            if actual_pos:
+                # 位姿误差
+                pos_error_ee = [target_xyz[i] - actual_pos[i] for i in range(3)]
+                
+                self.get_logger().info(f"\n--- 控制链路验证 ---", throttle_duration_sec=3.0)
+                self.get_logger().info(f"目标位姿: x={target_xyz[0]:.3f}, y={target_xyz[1]:.3f}, z={target_xyz[2]:.3f}", throttle_duration_sec=3.0)
+                self.get_logger().info(f"实际位姿: x={actual_pos[0]:.3f}, y={actual_pos[1]:.3f}, z={actual_pos[2]:.3f}", throttle_duration_sec=3.0)
+                self.get_logger().info(f"位置误差: dx={pos_error_ee[0]:+.4f}, dy={pos_error_ee[1]:+.4f}, dz={pos_error_ee[2]:+.4f}", throttle_duration_sec=3.0)
+                self.get_logger().info(f"模型输出动作: [{pose_delta[0]:+.4f}, {pose_delta[1]:+.4f}, {pose_delta[2]:+.4f}, {pose_delta[3]:+.4f}, {pose_delta[4]:+.4f}, {pose_delta[5]:+.4f}]", throttle_duration_sec=3.0)
+                self.get_logger().info(f"关节增量(IK): [{joint_delta[0]:+.4f}, {joint_delta[1]:+.4f}, {joint_delta[2]:+.4f}, {joint_delta[3]:+.4f}, {joint_delta[4]:+.4f}, {joint_delta[5]:+.4f}]", throttle_duration_sec=3.0)
+                
+                # 检查方向一致性
+                # 如果位置误差为正（目标在前方），动作应该也为正（向前移动）
+                direction_check = []
+                labels = ['dx', 'dy', 'dz']
+                for i in range(3):
+                    if abs(pos_error_ee[i]) > 0.1:  # 只检查显著误差
+                        error_sign = '+' if pos_error_ee[i] > 0 else '-'
+                        action_sign = '+' if pose_delta[i] > 0 else '-'
+                        consistent = '✓' if error_sign == action_sign else '✗'
+                        direction_check.append(f"{labels[i]}: {consistent} (error={error_sign}, action={action_sign})")
+                
+                if direction_check:
+                    self.get_logger().info(f"方向一致性: {', '.join(direction_check)}", throttle_duration_sec=3.0)
+        
+        target_pos = self.obs_dof_pos[0] + joint_delta
+        
         pos_error = target_pos - self.obs_dof_pos[0]
-        vel_error = -self.obs_dof_vel[0]  # Target velocity is 0
+        vel_error = -self.obs_dof_vel[0]
         
+        # 计算PD控制力矩
         torques = self.rl_kp * pos_error + self.rl_kd * vel_error
+        
+        # 限制力矩幅度（单独限制，避免爆炸）
+        # 使用更保守的限制，避免机器人运动过激
+        max_torque = torch.tensor([2.0, 2.0, 2.0, 1.5, 1.0, 0.8])  # 根据关节大小递减
+        torques = torch.clamp(torques, -max_torque, max_torque)
+        
         return torques.unsqueeze(0)
     
     def compute_position(self, actions):
         """Compute target joint positions from actions"""
-        target_pos = self.default_dof_pos + actions[0] * self.action_scale
+        pose_delta = (actions[0] * self.action_scale).detach().cpu().numpy()
+        current_joint_pos = self.obs_dof_pos[0].detach().cpu().numpy()
+        
+        joint_delta = self.differential_ik(pose_delta, current_joint_pos)
+        target_pos = self.obs_dof_pos[0] + joint_delta
         return target_pos.unsqueeze(0)
     
     def quaternion_to_euler(self, quat):
@@ -351,6 +481,10 @@ class ARM_RL_Sim(Node):
                 actions = self.forward()
                 self.obs_actions = actions
                 
+                # Debug: print actions every 2 seconds
+                if int(time.time()) % 2 == 0:
+                    self.get_logger().info(f"Model actions: {actions[0].detach().cpu().numpy()}", throttle_duration_sec=2.0)
+                
                 # Compute torques and positions
                 self.output_torques = self.compute_torques(actions)
                 self.output_torques = torch.clamp(
@@ -363,8 +497,8 @@ class ARM_RL_Sim(Node):
             time.sleep(thread_period)
     
     def control_loop(self):
-        """Control loop - sends commands every 15 seconds"""
-        command_publish_period = 15.0  # Publish command every 15 seconds
+        """Control loop - sends commands at 30Hz"""
+        command_publish_period = 0.033  # 30Hz control frequency
         debug_period = 0.1  # Debug data publish every 0.1 seconds (10Hz)
         
         self.get_logger().info(f"Control loop started with command publish period {command_publish_period}s")
@@ -378,7 +512,7 @@ class ARM_RL_Sim(Node):
             current_time = time.time()
             
             if self.simulation_running:
-                # Publish commands every 15 seconds
+                # Publish commands at 30Hz
                 if current_time - last_command_time >= command_publish_period:
                     # Prepare command message
                     for i in range(self.num_of_dofs):

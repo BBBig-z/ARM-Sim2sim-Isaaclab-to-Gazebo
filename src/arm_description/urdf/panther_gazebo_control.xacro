@@ -26,7 +26,7 @@
         <joint name="joint2">
             <command_interface name="effort"/>
             <state_interface name="position">
-                <param name="initial_value">-0.785</param>
+                <param name="initial_value">-0.5</param>
             </state_interface>
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
@@ -35,7 +35,7 @@
         <joint name="joint3">
             <command_interface name="effort"/>
             <state_interface name="position">
-                <param name="initial_value">1.57</param>
+                <param name="initial_value">0.5</param>
             </state_interface>
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
@@ -68,27 +68,34 @@
             <state_interface name="effort"/>
         </joint>
         
-        <!-- Gripper joint -->
+        <!-- Gripper joints - 现在是固定关节，不需要控制接口 -->
+        <!-- 如果需要恢复夹爪控制，取消下面的注释并在URDF中改回prismatic -->
+        <!--
         <joint name="gripper_1_joint">
             <command_interface name="effort"/>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
+        
+        <joint name="gripper_2_joint">
+            <command_interface name="effort"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <state_interface name="effort"/>
+        </joint>
+        -->
     </ros2_control>
     
     <!-- Gazebo ROS2 Control 插件配置 -->
     <gazebo>
         <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-            <!-- 指定控制器配置文件 -->
+            <robot_param>robot_description</robot_param>
+            <robot_param_node>robot_state_publisher</robot_param_node>
             <parameters>$(find arm_rl_sim)/config/robot_control.yaml</parameters>
-            <!-- 自动激活控制器（关键！） -->
-            <controller_manager_name>controller_manager</controller_manager_name>
-            <ros>
-                <namespace>/</namespace>
-            </ros>
         </plugin>
     </gazebo>
+    
 
 </robot>
 
