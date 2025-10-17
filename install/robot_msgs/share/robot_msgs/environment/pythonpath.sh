@@ -1,1 +1,0 @@
-/home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/robot_msgs/ament_cmake_environment_hooks/pythonpath.sh

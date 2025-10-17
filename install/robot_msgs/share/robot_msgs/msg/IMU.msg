@@ -1,1 +1,0 @@
-/home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/src/robot_msgs/msg/IMU.msg

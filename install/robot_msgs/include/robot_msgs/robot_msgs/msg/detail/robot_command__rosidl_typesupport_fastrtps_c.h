@@ -1,1 +1,0 @@
-/home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/robot_msgs/rosidl_typesupport_fastrtps_c/robot_msgs/msg/detail/robot_command__rosidl_typesupport_fastrtps_c.h
