@@ -1,0 +1,29 @@
+-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found rclpy: 3.3.17 (/opt/ros/humble/share/rclpy/cmake)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_rl_sim
+-- Install configuration: ""
+-- Execute custom install script
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/lib/arm_rl_sim/arm_rl_sim.py
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/lib/arm_rl_sim/target_pose_publisher.py
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//launch/gazebo.launch.py
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//models/arm_t_isaaclab/config.yaml
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//models/arm_t_isaaclab/policy.pt
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//config/robot_control.yaml
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/package_run_dependencies/arm_rl_sim
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/parent_prefix_path/arm_rl_sim
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/ament_prefix_path.sh
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/ament_prefix_path.dsv
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/path.sh
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/path.dsv
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.bash
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.sh
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.zsh
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.dsv
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/package.dsv
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/packages/arm_rl_sim
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/cmake/arm_rl_simConfig.cmake
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/cmake/arm_rl_simConfig-version.cmake
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/package.xml

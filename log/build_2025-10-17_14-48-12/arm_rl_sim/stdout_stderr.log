@@ -1,0 +1,44 @@
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Found rclpy: 3.3.17 (/opt/ros/humble/share/rclpy/cmake)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_rl_sim
+-- Install configuration: ""
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/lib/arm_rl_sim/arm_rl_sim.py
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/lib/arm_rl_sim/target_pose_publisher.py
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//launch
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//launch/gazebo.launch.py
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//models
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//models/arm_t_isaaclab
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//models/arm_t_isaaclab/config.yaml
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//models/arm_t_isaaclab/policy.pt
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//config
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//config/robot_control.yaml
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/package_run_dependencies/arm_rl_sim
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/parent_prefix_path/arm_rl_sim
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/ament_prefix_path.sh
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/ament_prefix_path.dsv
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/path.sh
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/path.dsv
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.bash
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.sh
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.zsh
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.dsv
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/package.dsv
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/packages/arm_rl_sim
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/cmake/arm_rl_simConfig.cmake
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/cmake/arm_rl_simConfig-version.cmake
+-- Installing: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/package.xml

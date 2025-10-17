@@ -1,0 +1,23 @@
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/lib/arm_rl_sim/arm_rl_sim.py
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/lib/arm_rl_sim/target_pose_publisher.py
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//launch/gazebo.launch.py
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//models/arm_t_isaaclab/config.yaml
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//models/arm_t_isaaclab/policy.pt
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim//config/robot_control.yaml
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/package_run_dependencies/arm_rl_sim
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/parent_prefix_path/arm_rl_sim
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/path.sh
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/environment/path.dsv
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.bash
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.sh
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.zsh
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/local_setup.dsv
+-- Symlinking: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/package.dsv
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/ament_index/resource_index/packages/arm_rl_sim
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/cmake/arm_rl_simConfig.cmake
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/cmake/arm_rl_simConfig-version.cmake
+-- Up-to-date symlink: /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/install/arm_rl_sim/share/arm_rl_sim/package.xml

@@ -1,0 +1,4 @@
+Invoking command in '/home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_description -- -j16 -l16
+Invoked command in '/home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_description -- -j16 -l16
+Invoking command in '/home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_description
+Invoked command in '/home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/y/works/ARM-Sim2sim-Isaaclab-to-Gazebo/build/arm_description

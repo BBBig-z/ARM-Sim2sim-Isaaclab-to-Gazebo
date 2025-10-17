@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!-- Gazebo 专用 URDF - 包含虚拟世界链接和机器人描述 -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ============================================ -->
+  <!-- 虚拟世界链接 - 固定机器人基座到世界坐标系 -->
+  <!-- ============================================ -->
+  <link name="world"/>
+  
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ============================================ -->
+  <!-- 包含基础机器人描述 -->
+  <!-- ============================================ -->
+  <xacro:include filename="$(find arm_description)/urdf/panther_description.urdf" />
+
+</robot>
+
